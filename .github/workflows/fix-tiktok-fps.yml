@@ -1,0 +1,45 @@
+name: Repair TikTok FPS
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-tiktok-fps.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Repair videos to TikTok-safe 30 FPS
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p repaired_media
+          curl -L --fail --retry 3 'https://static.metricool.com/planner/202609/6702596-file-16507211385794386520.mp4' -o /tmp/payout.mp4
+          curl -L --fail --retry 3 'https://static.metricool.com/planner/202609/6702596-file-4319888989171510134.mp4' -o /tmp/launch.mp4
+          curl -L --fail --retry 3 'https://static.metricool.com/planner/202609/6702596-file-15668262578766043489.mp4' -o /tmp/legal.mp4
+
+          ffmpeg -y -i /tmp/payout.mp4 -vf 'fps=30' -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -movflags +faststart -c:a aac -b:a 128k repaired_media/doordash-payout-30fps.mp4
+          ffmpeg -y -i /tmp/launch.mp4 -vf 'fps=30' -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -movflags +faststart -c:a aac -b:a 128k repaired_media/doordash-launch-30fps.mp4
+          ffmpeg -y -i /tmp/legal.mp4 -vf 'fps=30' -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -movflags +faststart -c:a aac -b:a 128k repaired_media/legal-postmortem-30fps.mp4
+
+          for f in repaired_media/*.mp4; do
+            echo "VERIFY $f"
+            ffprobe -v error -select_streams v:0 -show_entries stream=avg_frame_rate,r_frame_rate,pix_fmt,codec_name -of default=nw=1 "$f"
+          done
+
+      - name: Commit repaired media
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Atlas Repair Bot'
+          git config user.email 'atlas-repair-bot@users.noreply.github.com'
+          git add repaired_media/*.mp4
+          git commit -m 'Repair TikTok videos to 30 FPS' || exit 0
+          git push
