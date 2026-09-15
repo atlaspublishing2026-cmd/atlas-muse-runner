@@ -1,0 +1,27 @@
+{
+  "brand": "Build It Smaller",
+  "platform": "tiktok",
+  "version": 2,
+  "duration_target_seconds": 24,
+  "objective": "attention_engagement",
+  "audience": "people who want more usable storage from small kitchens",
+  "pain": "valuable cabinet toe-kick space is normally wasted",
+  "hook_deadline_seconds": 2,
+  "hook": "Your kitchen has drawers you didn't know existed.",
+  "creative_doctrine": ["stop_the_thumb", "create_curiosity", "reward_attention", "deliver_payoff", "obvious_next_action"],
+  "scenes": [
+    {"start":0,"end":2,"purpose":"thumb_stop","visual":"ordinary kitchen cabinet then drawer snaps outward from toe-kick immediately","onscreen":"YOUR KITCHEN IS HIDING DRAWERS","voice":"Your kitchen has drawers you didn't know existed."},
+    {"start":2,"end":5,"purpose":"curiosity","visual":"fast close-up of empty toe-kick strip highlighted","onscreen":"THIS SPACE IS USUALLY WASTED","voice":"That strip under your cabinets is usually just wasted space."},
+    {"start":5,"end":9,"purpose":"reveal","visual":"toe-kick face transforms into three sliding drawers","onscreen":"TURN IT INTO STORAGE","voice":"But it can become hidden pull-out storage."},
+    {"start":9,"end":13,"purpose":"reward","visual":"drawers fill with baking sheets towels and flat kitchen items","onscreen":"PANS • TOWELS • TRAYS","voice":"Enough for trays, towels, baking sheets, and the stuff stealing room from your cabinets."},
+    {"start":13,"end":17,"purpose":"contrast","visual":"quick before and after split screen cluttered cabinet versus organized cabinet","onscreen":"SAME KITCHEN. MORE SPACE.","voice":"Same kitchen. No bigger footprint. More usable space."},
+    {"start":17,"end":21,"purpose":"payoff","visual":"wide clean kitchen with toe-kick drawers closing flush and disappearing","onscreen":"HIDE SPACE IN PLAIN SIGHT","voice":"Close them and the storage disappears right back into the room."},
+    {"start":21,"end":24,"purpose":"cta","visual":"rapid montage of three other small-space transformations with Build It Smaller mark","onscreen":"WHAT SPACE SHOULD WE FIND NEXT?","voice":"What wasted space should Build It Smaller find next?"}
+  ],
+  "voiceover": true,
+  "captions": true,
+  "music": true,
+  "editing": {"max_seconds_without_visual_change":3,"target_visual_beats":10,"fast_first_5_seconds":true,"no_intro_logo":true,"no_static_title_card":true},
+  "cta": "Comment with the space you want us to solve next.",
+  "commercial_note": "This V2 is an audience-growth/engagement video, not a direct product advertisement. It must make Build It Smaller's promise obvious: finding useful space hiding in plain sight."
+}
