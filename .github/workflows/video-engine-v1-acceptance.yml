@@ -1,0 +1,37 @@
+name: Atlas Video Engine V1 Acceptance
+on:
+  push:
+    paths:
+      - 'scripts/video_engine_v1.py'
+      - '.github/workflows/video-engine-v1-acceptance.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install free video stack
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg espeak fonts-dejavu-core python3-pip
+          python3 -m pip install --break-system-packages edge-tts
+      - name: Render first Atlas Video Engine video
+        run: python3 scripts/video_engine_v1.py
+      - name: Verify output
+        run: |
+          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,pix_fmt,avg_frame_rate,width,height -of default=nw=1 video_engine_output/atlas-video-engine-v1-toe-kick.mp4
+      - name: Commit acceptance artifact
+        run: |
+          git config user.name 'Atlas Video Engine'
+          git config user.email 'atlas-video-engine@users.noreply.github.com'
+          git add video_engine_output/
+          git commit -m 'Render Atlas Video Engine V1 acceptance video' || exit 0
+          git push
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atlas-video-engine-v1
+          path: video_engine_output/
+          retention-days: 7
