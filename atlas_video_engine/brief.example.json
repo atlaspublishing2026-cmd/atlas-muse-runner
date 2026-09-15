@@ -1,0 +1,17 @@
+{
+  "brand": "Build It Smaller",
+  "platform": "tiktok",
+  "duration_target_seconds": 20,
+  "format": "problem_solution",
+  "hook": "Your kitchen is hiding storage in plain sight.",
+  "scenes": [
+    {"seconds": 3, "purpose": "hook", "visual_query": "small kitchen toe kick cabinets", "onscreen": "WASTED SPACE?"},
+    {"seconds": 5, "purpose": "problem", "visual_query": "tiny kitchen storage clutter", "onscreen": "Most kitchens ignore this strip."},
+    {"seconds": 7, "purpose": "transformation", "visual_query": "toe kick drawer kitchen", "onscreen": "Turn it into hidden drawers."},
+    {"seconds": 5, "purpose": "payoff_cta", "visual_query": "organized small kitchen", "onscreen": "Would you build this?"}
+  ],
+  "voiceover": true,
+  "captions": true,
+  "music": true,
+  "cta": "Follow Build It Smaller for useful space hiding in plain sight."
+}
