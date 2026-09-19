@@ -115,7 +115,7 @@ function home(){
  '<div class="row"><div class="ico">◫</div><div class="rowmain"><b>Marketing</b><span>Today’s 3-post target not yet satisfied in preview data</span></div><span class="badge amber">WATCH</span></div>'+
  '<div class="row"><div class="ico">$</div><div class="rowmain"><b>Revenue</b><span>No simulated sale recorded yet</span></div><span class="badge">0</span></div>'+
  '</div>'+
- '<button class="btn secondary" onclick="state.connected=!state.connected;state.logs.push(now()+\'  INFO  Demo node '+(state.connected?\'connected\':\'disconnected\'));save();render();toast(state.connected?\'Demo Mac connected\':\'Demo Mac disconnected\')">'+(state.connected?'Disconnect Demo Node':'Simulate Mac Connection')+'</button>';
+ '<button class="btn secondary" onclick="toggleConn()">'+(state.connected?'Disconnect Demo Node':'Simulate Mac Connection')+'</button>';
 }
 function jobs(){
  return '<div class="section-title" style="margin-top:4px"><h3>Job Queue</h3><span>'+state.jobs.length+' jobs</span></div>'+
