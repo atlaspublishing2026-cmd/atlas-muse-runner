@@ -69,11 +69,50 @@ label{font-size:12px;color:var(--muted)}
 <div class="app">
   <div class="top">
     <div class="brand"><div class="mark"></div><div><h1>Atlas Cockpit</h1><small>Your Atlas. In Your Pocket.</small></div></div>
-    <div class="demo">PREVIEW v0.4</div>
+    <div class="demo">PREVIEW v0.5</div>
   </div>
-  <main id="view"></main>
+  <main id="view">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="sub" style="text-transform:uppercase;letter-spacing:1px;font-weight:800;color:#73b7ff">CEO OVERVIEW</div>
+          <h2 style="margin-top:5px">Atlas Command</h2>
+          <div class="status"><span class="dot" style="background:#ffbf47;box-shadow:none"></span>Atlas Preview Ready</div>
+          <div class="sub" style="margin-top:6px">Use this cockpit to see what Atlas is doing, what needs attention, and what you want it to do next.</div>
+        </div>
+        <div class="pill">PREVIEW</div>
+      </div>
+      <div class="grid">
+        <div class="metric"><span>Revenue</span><b>$0.00</b><span>demo view</span></div>
+        <div class="metric"><span>Products Live</span><b>3</b><span>sample portfolio</span></div>
+        <div class="metric"><span>Content Today</span><b>0 / 3</b><span>sample target</span></div>
+        <div class="metric"><span>Needs Attention</span><b>1</b><span>demo item</span></div>
+      </div>
+    </section>
+    <div class="section-title"><h3>Give Atlas a Mission</h3><span>CEO command</span></div>
+    <div class="card" style="padding:14px">
+      <label for="ceoCommand">Tell Atlas what outcome you want.</label>
+      <textarea id="ceoCommand" style="min-height:88px" placeholder="Example: Find out why today’s TikTok posts failed, repair the pipeline, and verify the next post is ready."></textarea>
+      <div style="height:10px"></div>
+      <button class="btn" onclick="runCEOCommand()">Send Mission to Atlas</button>
+      <div class="sub" style="margin-top:9px">Preview mode simulates a job. The Mac-connected version will dispatch the real bounded mission.</div>
+    </div>
+    <div class="section-title"><h3>Company Right Now</h3><span>what matters first</span></div>
+    <div class="card">
+      <div class="row" onclick="go('jobs')"><div class="ico">⚙</div><div class="rowmain"><b>Atlas is working</b><span>See running, queued and completed work</span></div><div class="chev">›</div></div>
+      <div class="row" onclick="showAttention()"><div class="ico">!</div><div class="rowmain"><b>Problems &amp; blockers</b><span>Anything Atlas cannot repair automatically lands here</span></div><span class="badge amber">CHECK</span></div>
+      <div class="row" onclick="showApprovals()"><div class="ico">✓</div><div class="rowmain"><b>Approvals</b><span>Only material decisions should stop at your desk</span></div><span class="badge green">0</span></div>
+      <div class="row" onclick="go('missions')"><div class="ico">➤</div><div class="rowmain"><b>Mission Control</b><span>Launch bounded Atlas jobs</span></div><div class="chev">›</div></div>
+    </div>
+  </main>
 </div>
-<nav class="tabs" id="tabs"></nav>
+<nav class="tabs" id="tabs">
+    <button class="tab on" onclick="go('home')"><i>⌂</i><span>Home</span></button>
+    <button class="tab" onclick="go('jobs')"><i>☷</i><span>Work</span></button>
+    <button class="tab" onclick="go('missions')"><i>➤</i><span>Missions</span></button>
+    <button class="tab" onclick="go('logs')"><i>≡</i><span>Logs</span></button>
+    <button class="tab" onclick="go('settings')"><i>⚙</i><span>More</span></button>
+  </nav>
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="sheet" id="sheet"></div></div>
 <div class="toast" id="toast"></div>
 <script>
@@ -82,12 +121,22 @@ const seedJobs=[
 {id:1025,title:'Generate Thumbnails',state:'queued',detail:'Create fresh social and storefront thumbnails.',duration:'—'},
 {id:1023,title:'QA Sweep',state:'completed',detail:'Validate release gates and evidence receipts.',duration:'2m 14s'}
 ];
-const state=JSON.parse(localStorage.getItem('atlasCockpitState')||'null')||{tab:'home',connected:false,jobs:seedJobs,notes:'',logs:[
+const defaultState={tab:'home',connected:false,jobs:seedJobs,notes:'',logs:[
 '20:01:12  INFO  Atlas Cockpit preview initialized',
 '20:01:13  INFO  Demo data loaded',
 '20:02:01  INFO  Waiting for Mac node pairing'
 ]};
-function save(){localStorage.setItem('atlasCockpitState',JSON.stringify(state))}
+let state=defaultState;
+try{
+  const saved=window.localStorage ? localStorage.getItem('atlasCockpitState') : null;
+  if(saved){
+    const parsed=JSON.parse(saved);
+    if(parsed && Array.isArray(parsed.jobs) && Array.isArray(parsed.logs)){
+      state=Object.assign({},defaultState,parsed);
+    }
+  }
+}catch(e){ state=defaultState; }
+function save(){try{localStorage.setItem('atlasCockpitState',JSON.stringify(state))}catch(e){}}
 function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1800)}
 const tabs=[['home','⌂','Home'],['jobs','☷','Work'],['missions','➤','Missions'],['logs','≡','Logs'],['settings','⚙','More']];
 function nav(){document.getElementById('tabs').innerHTML=tabs.map(t=>'<button class="tab '+(state.tab===t[0]?'on':'')+'" onclick="go(\''+t[0]+'\')"><i>'+t[1]+'</i><span>'+t[2]+'</span></button>').join('')}
@@ -131,7 +180,7 @@ const missions=[
 function missionsView(){return '<div class="section-title" style="margin-top:4px"><h3>Mission Control</h3><span>bounded tasks only</span></div><div class="stack">'+missions.map((m,i)=>'<div class="card" style="margin:0"><div class="row" onclick="launch('+i+')"><div class="ico">'+m[2]+'</div><div class="rowmain"><b>'+m[0]+'</b><span>'+m[1]+'</span></div><div class="chev">›</div></div></div>').join('')+'</div><div class="install" style="margin-top:14px"><b>Safety rail</b><p>The phone preview does not have shell access or destructive system controls. The real Mac node will expose only approved Atlas actions.</p></div>'}
 function runCEOCommand(){
  const el=document.getElementById('ceoCommand');
- const text=(el?.value||'').trim();
+ const text=((el && el.value)||'').trim();
  if(!text){toast('Type a mission first');return}
  const id=Math.max(...state.jobs.map(j=>j.id))+1;
  state.jobs.push({id,title:'CEO Mission',state:'running',detail:text,duration:'running'});
@@ -179,23 +228,6 @@ function closeModal(){document.getElementById('modal').classList.remove('on')}
 function now(){return new Date().toLocaleTimeString([], {hour12:false})}
 function render(){nav();const v=document.getElementById('view');v.innerHTML=state.tab==='home'?home():state.tab==='jobs'?jobs():state.tab==='missions'?missionsView():state.tab==='logs'?logs():settings()}
 render();
-window.addEventListener('load',async()=>{
-  try{
-    if('serviceWorker' in navigator){
-      const regs=await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map(r=>r.unregister()));
-    }
-    if('caches' in window){
-      const keys=await caches.keys();
-      await Promise.all(keys.map(k=>caches.delete(k)));
-    }
-  }catch(e){}
-  const u=new URL(location.href);
-  if(!u.searchParams.has('_fresh')){
-    u.searchParams.set('_fresh',Date.now().toString());
-    location.replace(u.toString());
-  }
-});
 
 </script>
 </body>
