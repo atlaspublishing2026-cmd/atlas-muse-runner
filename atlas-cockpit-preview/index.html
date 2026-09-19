@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#07101d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Atlas Cockpit">
+<title>Atlas Cockpit Preview</title>\n<link rel="manifest" href="./manifest.webmanifest">\n<link rel="icon" href="./icon.svg" type="image/svg+xml">\n<link rel="apple-touch-icon" href="./icon.svg">
+<style>
+:root{--bg:#07101d;--bg2:#0b1727;--card:#101f31;--card2:#12263c;--line:#22374f;--txt:#f4f8ff;--muted:#8ea4bd;--blue:#2f86ff;--blue2:#66adff;--green:#45e27a;--amber:#ffbf47;--red:#ff6b6b;--shadow:0 16px 45px rgba(0,0,0,.28)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:radial-gradient(circle at 50% -20%,#173454 0,#08121f 38%,#050b13 100%);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;min-height:100%;overscroll-behavior:none}
+body{min-height:100dvh}
+button,input,textarea{font:inherit}
+button{color:inherit}
+.app{max-width:520px;margin:0 auto;min-height:100dvh;padding:calc(env(safe-area-inset-top) + 10px) 16px calc(92px + env(safe-area-inset-bottom))}
+.top{display:flex;align-items:center;justify-content:space-between;margin:2px 0 18px}
+.brand{display:flex;align-items:center;gap:11px}
+.mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#56a6ff,#1356d8);clip-path:polygon(50% 0,100% 100%,72% 100%,50% 58%,28% 100%,0 100%);box-shadow:0 8px 22px rgba(47,134,255,.35)}
+.brand h1{font-size:24px;line-height:1;margin:0;font-weight:800;letter-spacing:-.5px}
+.brand small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.demo{padding:7px 10px;border:1px solid #3a5680;background:#102541;border-radius:999px;color:#9dcbff;font-weight:700;font-size:11px;letter-spacing:.5px}
+.hero{background:linear-gradient(135deg,#112a45,#0c1928);border:1px solid #1f3854;border-radius:22px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.hero h2{font-size:25px;margin:0 0 6px}
+.status{display:flex;align-items:center;gap:8px;font-weight:750}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 16px rgba(69,226,122,.7)}
+.sub{font-size:13px;color:var(--muted);line-height:1.45}
+.pill{border:1px solid #325078;border-radius:999px;padding:7px 10px;font-size:11px;color:#b6d7ff;background:#10243b;white-space:nowrap}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
+.metric{background:#0b1725;border:1px solid var(--line);border-radius:15px;padding:13px}
+.metric b{font-size:19px;display:block;margin-top:4px}
+.metric span{color:var(--muted);font-size:11px}
+.bar{height:5px;border-radius:999px;background:#26374b;margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:inherit}
+.section-title{display:flex;justify-content:space-between;align-items:end;margin:22px 2px 10px}
+.section-title h3{margin:0;font-size:18px}.section-title span{color:var(--muted);font-size:12px}
+.card{background:rgba(13,27,43,.92);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.16);margin-bottom:11px}
+.row{display:flex;align-items:center;gap:12px;padding:14px 14px;border-bottom:1px solid rgba(49,70,94,.6)}.row:last-child{border-bottom:0}
+.ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#132b47;border:1px solid #29496d;font-size:18px;flex:0 0 auto}
+.rowmain{min-width:0;flex:1}.rowmain b{display:block;font-size:15px}.rowmain span{display:block;color:var(--muted);font-size:12px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chev{color:#6d87a4;font-size:22px}
+.btn{width:100%;border:0;border-radius:14px;padding:13px 15px;font-weight:780;background:linear-gradient(135deg,#2477f5,#2d92ff);box-shadow:0 9px 24px rgba(35,126,255,.25)}
+.btn.secondary{background:#11243a;border:1px solid #2a4565;box-shadow:none;color:#c8dcf2}
+.btn.warn{background:#3a2510;border:1px solid #7d592b;box-shadow:none;color:#ffd795}
+.stack{display:grid;gap:10px}
+.tabs{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(520px,100%);padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:rgba(5,12,21,.92);backdrop-filter:blur(18px);border-top:1px solid #1e3044;display:grid;grid-template-columns:repeat(5,1fr);z-index:30}
+.tab{border:0;background:transparent;color:#6f8297;padding:6px 2px 2px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px}
+.tab i{font-style:normal;font-size:20px}.tab.on{color:#4a98ff;font-weight:750}
+.seg{display:flex;background:#0a1725;border:1px solid var(--line);padding:4px;border-radius:13px;margin-bottom:12px}
+.seg button{flex:1;border:0;background:transparent;color:var(--muted);padding:8px;border-radius:9px;font-size:12px}
+.seg button.on{background:#1d6fdf;color:white;font-weight:760}
+.badge{font-size:10px;padding:4px 7px;border-radius:999px;background:#15395e;color:#9fcaff}.badge.green{background:#143a27;color:#78ef9d}.badge.amber{background:#42300f;color:#ffd26b}
+.log{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:1.6;color:#bdcde0;padding:12px;white-space:pre-wrap}.log .g{color:#62ec89}.log .a{color:#ffc45c}.log .b{color:#6eb3ff}
+textarea{width:100%;min-height:130px;resize:vertical;background:#091522;border:1px solid #29415f;border-radius:14px;color:#eef6ff;padding:12px;outline:none}
+label{font-size:12px;color:var(--muted)}
+.toggle{width:50px;height:28px;border-radius:999px;background:#23364a;padding:3px;transition:.2s;flex:0 0 auto}.toggle i{display:block;width:22px;height:22px;border-radius:50%;background:#eaf3ff;transition:.2s}.toggle.on{background:#237ef0}.toggle.on i{transform:translateX(22px)}
+.install{border:1px solid #355b89;background:linear-gradient(135deg,#102947,#0d1d31);padding:15px;border-radius:18px;margin:0 0 15px}.install b{display:block;margin-bottom:5px}.install p{margin:0;color:#a9bdd3;font-size:12px;line-height:1.5}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.58);backdrop-filter:blur(8px);display:none;align-items:flex-end;z-index:80}.modal.on{display:flex}.sheet{width:min(520px,100%);margin:0 auto;background:#0c1827;border:1px solid #2a3c53;border-radius:24px 24px 0 0;padding:18px 16px calc(22px + env(safe-area-inset-bottom));max-height:82dvh;overflow:auto}
+.sheetbar{width:46px;height:5px;border-radius:99px;background:#405268;margin:0 auto 17px}
+.sheet h3{margin:0 0 6px;font-size:22px}.kv{display:grid;grid-template-columns:1fr auto;padding:11px 0;border-bottom:1px solid #203247;font-size:13px}.kv span:first-child{color:var(--muted)}
+.toast{position:fixed;left:50%;transform:translateX(-50%) translateY(20px);bottom:calc(90px + env(safe-area-inset-bottom));background:#e9f3ff;color:#07101d;padding:11px 14px;border-radius:12px;font-size:12px;font-weight:750;opacity:0;pointer-events:none;transition:.25s;z-index:100;box-shadow:0 8px 30px rgba(0,0,0,.35)}.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty{padding:26px;text-align:center;color:var(--muted);font-size:13px}
+@media(min-width:700px){body{padding:20px}.app{min-height:calc(100dvh - 40px);border:1px solid #20364f;border-radius:32px;box-shadow:0 35px 100px rgba(0,0,0,.45);overflow:hidden}.tabs{bottom:20px;border-radius:0 0 32px 32px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand"><div class="mark"></div><div><h1>Atlas Cockpit</h1><small>Your Atlas. In Your Pocket.</small></div></div>
+    <div class="demo">PREVIEW</div>
+  </div>
+  <main id="view"></main>
+</div>
+<nav class="tabs" id="tabs"></nav>
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const seedJobs=[
+{id:1024,title:'Build Book Assets',state:'queued',detail:'Compile and package current book assets.',duration:'—'},
+{id:1025,title:'Generate Thumbnails',state:'queued',detail:'Create fresh social and storefront thumbnails.',duration:'—'},
+{id:1023,title:'QA Sweep',state:'completed',detail:'Validate release gates and evidence receipts.',duration:'2m 14s'}
+];
+const state=JSON.parse(localStorage.getItem('atlasCockpitState')||'null')||{tab:'home',connected:false,jobs:seedJobs,notes:'',logs:[
+'20:01:12  INFO  Atlas Cockpit preview initialized',
+'20:01:13  INFO  Demo data loaded',
+'20:02:01  INFO  Waiting for Mac node pairing'
+]};
+function save(){localStorage.setItem('atlasCockpitState',JSON.stringify(state))}
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1800)}
+const tabs=[['home','⌂','Home'],['jobs','☷','Jobs'],['missions','➤','Missions'],['logs','≡','Logs'],['settings','⚙','More']];
+function nav(){document.getElementById('tabs').innerHTML=tabs.map(t=>'<button class="tab '+(state.tab===t[0]?'on':'')+'" onclick="go(\''+t[0]+'\')"><i>'+t[1]+'</i><span>'+t[2]+'</span></button>').join('')}
+function go(t){state.tab=t;save();render()}
+function installCard(){if(window.navigator.standalone)return '';return '<div class="install"><b>Install this preview on your iPhone</b><p>In Safari, tap <strong>Share</strong> → <strong>Add to Home Screen</strong> → <strong>Add</strong>. It will open like an app.</p></div>'}
+function home(){
+ const q=state.jobs.filter(j=>j.state==='queued').length,c=state.jobs.filter(j=>j.state==='completed').length;
+ return installCard()+
+ '<section class="hero"><div class="hero-top"><div><h2>Atlas</h2><div class="status"><span class="dot" style="background:'+(state.connected?'#45e27a':'#ffbf47')+';box-shadow:none"></span>'+(state.connected?'Demo Node Online':'Mac Not Paired')+'</div><div class="sub" style="margin-top:5px">'+(state.connected?'Preview connection • simulated telemetry':'Cockpit is ready. Pair the real Mac when it comes online.')+'</div></div><div class="pill">'+(state.connected?'SIMULATED':'READY')+'</div></div>'+
+ '<div class="grid"><div class="metric"><span>CPU</span><b>'+(state.connected?'12%':'—')+'</b><div class="bar"><i style="width:'+(state.connected?'12%':'0')+'"></i></div></div><div class="metric"><span>Memory</span><b>'+(state.connected?'4.1 GB':'—')+'</b><div class="bar"><i style="width:'+(state.connected?'26%':'0')+'"></i></div></div><div class="metric"><span>Queued</span><b>'+q+'</b><span>jobs waiting</span></div><div class="metric"><span>Completed</span><b>'+c+'</b><span>demo receipts</span></div></div></section>'+
+ '<div class="section-title"><h3>Quick controls</h3><span>Preview mode</span></div>'+
+ '<div class="card"><div class="row" onclick="go(\'logs\')"><div class="ico">▤</div><div class="rowmain"><b>View Logs</b><span>Inspect recent Atlas activity</span></div><div class="chev">›</div></div><div class="row" onclick="go(\'jobs\')"><div class="ico">☷</div><div class="rowmain"><b>Job Queue</b><span>Queued, running and completed work</span></div><div class="chev">›</div></div><div class="row" onclick="go(\'missions\')"><div class="ico">➤</div><div class="rowmain"><b>Missions</b><span>Launch approved bounded tasks</span></div><div class="chev">›</div></div></div>'+
+ '<button class="btn secondary" onclick="state.connected=!state.connected;state.logs.push(now()+\'  INFO  Demo node '+(state.connected?'connected':'disconnected')+'\');save();render();toast(state.connected?\'Demo Mac connected\':\'Demo Mac disconnected\')">'+(state.connected?'Disconnect Demo Node':'Simulate Mac Connection')+'</button>';
+}
+function jobs(){
+ return '<div class="section-title" style="margin-top:4px"><h3>Job Queue</h3><span>'+state.jobs.length+' jobs</span></div>'+
+ '<div class="seg"><button class="on">All</button><button>Queued</button><button>Running</button><button>Completed</button></div>'+
+ '<div class="card">'+state.jobs.slice().reverse().map(j=>'<div class="row" onclick="jobDetail('+j.id+')"><div class="ico">'+(j.state==='completed'?'✓':j.state==='running'?'↻':'◷')+'</div><div class="rowmain"><b>'+j.title+'</b><span>#'+j.id+' • '+j.detail+'</span></div><span class="badge '+(j.state==='completed'?'green':j.state==='running'?'amber':'')+'">'+j.state+'</span></div>').join('')+'</div>';
+}
+const missions=[
+['Build Book','Compile and package your current book.','▣'],
+['Generate Assets','Create images, thumbnails and listing assets.','▧'],
+['QA Sweep','Run a bounded validation pass and produce a receipt.','✓'],
+['Publish Preview','Stage a preview release without public publication.','↗']
+];
+function missionsView(){return '<div class="section-title" style="margin-top:4px"><h3>Mission Control</h3><span>bounded tasks only</span></div><div class="stack">'+missions.map((m,i)=>'<div class="card" style="margin:0"><div class="row" onclick="launch('+i+')"><div class="ico">'+m[2]+'</div><div class="rowmain"><b>'+m[0]+'</b><span>'+m[1]+'</span></div><div class="chev">›</div></div></div>').join('')+'</div><div class="install" style="margin-top:14px"><b>Safety rail</b><p>The phone preview does not have shell access or destructive system controls. The real Mac node will expose only approved Atlas actions.</p></div>'}
+function launch(i){
+ const id=Math.max(...state.jobs.map(j=>j.id))+1, m=missions[i];
+ const j={id,title:m[0],state:'running',detail:m[1],duration:'running'};
+ state.jobs.push(j);state.logs.push(now()+'  INFO  Mission "'+m[0]+'" initiated');save();go('jobs');toast('Mission started');
+ setTimeout(()=>{const x=state.jobs.find(a=>a.id===id);if(!x)return;x.state='completed';x.duration='2m '+String(10+Math.floor(Math.random()*40))+'s';state.logs.push(now()+'  INFO  Job #'+id+' completed');state.logs.push(now()+'  INFO  Receipt stored');save();if(state.tab==='jobs')render();toast('Job #'+id+' completed')},2600);
+}
+function logs(){return '<div class="section-title" style="margin-top:4px"><h3>Logs</h3><span>local demo history</span></div><div class="card"><div class="log">'+state.logs.slice().reverse().map(l=>l.replace('INFO','<span class="g">INFO</span>').replace('WARN','<span class="a">WARN</span>')).join('\n')+'</div></div><button class="btn secondary" onclick="state.logs=[];save();render();toast(\'Logs cleared\')">Clear Demo Logs</button>'}
+function settings(){
+ return '<div class="section-title" style="margin-top:4px"><h3>Cockpit Lab</h3><span>v0.3 preview</span></div>'+
+ '<div class="card"><div class="row" onclick="toggleConn()"><div class="ico">⌁</div><div class="rowmain"><b>Simulated Mac Node</b><span>Preview connected and disconnected states</span></div><div class="toggle '+(state.connected?'on':'')+'"><i></i></div></div><div class="row"><div class="ico">⌾</div><div class="rowmain"><b>Face ID</b><span>Native build feature • not available in web preview</span></div><span class="badge">NATIVE</span></div><div class="row"><div class="ico">⌘</div><div class="rowmain"><b>Real Mac Pairing</b><span>Activates when Atlas Node is running</span></div><span class="badge">LATER</span></div></div>'+
+ '<div class="section-title"><h3>What should we change?</h3><span>saved on this phone</span></div><div class="card" style="padding:14px"><label for="notes">Use this while you play with the app. Add anything you want moved, renamed, removed or invented.</label><textarea id="notes" placeholder="Example: Put Mission Control on the home screen…" oninput="state.notes=this.value;save()">'+esc(state.notes)+'</textarea><div style="height:10px"></div><button class="btn" onclick="shareNotes()">Share / Copy Feedback</button></div>'+
+ '<button class="btn warn" onclick="resetDemo()">Reset Preview Data</button>';
+}
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function toggleConn(){state.connected=!state.connected;state.logs.push(now()+'  INFO  Demo node '+(state.connected?'connected':'disconnected'));save();render();toast(state.connected?'Demo node online':'Demo node offline')}
+async function shareNotes(){const txt='Atlas Cockpit feedback:\n\n'+(state.notes||'(No notes yet)');try{if(navigator.share){await navigator.share({title:'Atlas Cockpit Feedback',text:txt})}else{await navigator.clipboard.writeText(txt);toast('Feedback copied')}}catch(e){}}
+function resetDemo(){if(!confirm('Reset all local preview jobs, logs and notes?'))return;localStorage.removeItem('atlasCockpitState');location.reload()}
+function jobDetail(id){const j=state.jobs.find(x=>x.id===id);if(!j)return;document.getElementById('sheet').innerHTML='<div class="sheetbar"></div><h3>Job #'+j.id+'</h3><div class="status" style="margin-bottom:14px"><span class="dot" style="background:'+(j.state==='completed'?'#45e27a':'#ffbf47')+';box-shadow:none"></span>'+j.state[0].toUpperCase()+j.state.slice(1)+'</div><div class="card"><div class="kv"><span>Task</span><b>'+j.title+'</b></div><div class="kv"><span>Duration</span><b>'+j.duration+'</b></div><div class="kv"><span>Mode</span><b>Preview</b></div><div class="kv"><span>Receipt</span><b>'+ (j.state==='completed'?'DEMO-'+j.id:'Pending') +'</b></div></div><div class="install"><b>Execution receipt</b><p>This is simulated evidence for interface testing. When the Mac node is connected, this panel will show the real task result, timestamps, validation state and stored receipt.</p></div><button class="btn secondary" onclick="closeModal()">Close</button>';document.getElementById('modal').classList.add('on')}
+function closeModal(){document.getElementById('modal').classList.remove('on')}
+function now(){return new Date().toLocaleTimeString([], {hour12:false})}
+function render(){nav();const v=document.getElementById('view');v.innerHTML=state.tab==='home'?home():state.tab==='jobs'?jobs():state.tab==='missions'?missionsView():state.tab==='logs'?logs():settings()}
+render();
+</script>
+</body>
+</html>
