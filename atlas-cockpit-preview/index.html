@@ -89,18 +89,33 @@ const state=JSON.parse(localStorage.getItem('atlasCockpitState')||'null')||{tab:
 ]};
 function save(){localStorage.setItem('atlasCockpitState',JSON.stringify(state))}
 function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1800)}
-const tabs=[['home','⌂','Home'],['jobs','☷','Jobs'],['missions','➤','Missions'],['logs','≡','Logs'],['settings','⚙','More']];
+const tabs=[['home','⌂','Home'],['jobs','☷','Work'],['missions','➤','Missions'],['logs','≡','Logs'],['settings','⚙','More']];
 function nav(){document.getElementById('tabs').innerHTML=tabs.map(t=>'<button class="tab '+(state.tab===t[0]?'on':'')+'" onclick="go(\''+t[0]+'\')"><i>'+t[1]+'</i><span>'+t[2]+'</span></button>').join('')}
 function go(t){state.tab=t;save();render()}
 function installCard(){if(window.navigator.standalone)return '';return '<div class="install"><b>Install this preview on your iPhone</b><p>In Safari, tap <strong>Share</strong> → <strong>Add to Home Screen</strong> → <strong>Add</strong>. It will open like an app.</p></div>'}
 function home(){
- const q=state.jobs.filter(j=>j.state==='queued').length,c=state.jobs.filter(j=>j.state==='completed').length;
+ const q=state.jobs.filter(j=>j.state==='queued').length;
+ const r=state.jobs.filter(j=>j.state==='running').length;
+ const cdone=state.jobs.filter(j=>j.state==='completed').length;
  return installCard()+
- '<section class="hero"><div class="hero-top"><div><h2>Atlas</h2><div class="status"><span class="dot" style="background:'+(state.connected?'#45e27a':'#ffbf47')+';box-shadow:none"></span>'+(state.connected?'Demo Node Online':'Mac Not Paired')+'</div><div class="sub" style="margin-top:5px">'+(state.connected?'Preview connection • simulated telemetry':'Cockpit is ready. Pair the real Mac when it comes online.')+'</div></div><div class="pill">'+(state.connected?'SIMULATED':'READY')+'</div></div>'+
- '<div class="grid"><div class="metric"><span>CPU</span><b>'+(state.connected?'12%':'—')+'</b><div class="bar"><i style="width:'+(state.connected?'12%':'0')+'"></i></div></div><div class="metric"><span>Memory</span><b>'+(state.connected?'4.1 GB':'—')+'</b><div class="bar"><i style="width:'+(state.connected?'26%':'0')+'"></i></div></div><div class="metric"><span>Queued</span><b>'+q+'</b><span>jobs waiting</span></div><div class="metric"><span>Completed</span><b>'+c+'</b><span>demo receipts</span></div></div></section>'+
- '<div class="section-title"><h3>Quick controls</h3><span>Preview mode</span></div>'+
- '<div class="card"><div class="row" onclick="go(\'logs\')"><div class="ico">▤</div><div class="rowmain"><b>View Logs</b><span>Inspect recent Atlas activity</span></div><div class="chev">›</div></div><div class="row" onclick="go(\'jobs\')"><div class="ico">☷</div><div class="rowmain"><b>Job Queue</b><span>Queued, running and completed work</span></div><div class="chev">›</div></div><div class="row" onclick="go(\'missions\')"><div class="ico">➤</div><div class="rowmain"><b>Missions</b><span>Launch approved bounded tasks</span></div><div class="chev">›</div></div></div>'+
- '<button class="btn secondary" onclick="state.connected=!state.connected;state.logs.push(now()+\'  INFO  Demo node '+(state.connected?'connected':'disconnected')+'\');save();render();toast(state.connected?\'Demo Mac connected\':\'Demo Mac disconnected\')">'+(state.connected?'Disconnect Demo Node':'Simulate Mac Connection')+'</button>';
+ '<section class="hero"><div class="hero-top"><div><div class="sub" style="text-transform:uppercase;letter-spacing:1px;font-weight:800;color:#73b7ff">CEO OVERVIEW</div><h2 style="margin-top:5px">Atlas Command</h2><div class="status"><span class="dot" style="background:'+(state.connected?'#45e27a':'#ffbf47')+';box-shadow:none"></span>'+(state.connected?'Demo Atlas Online':'Atlas Preview Ready')+'</div><div class="sub" style="margin-top:6px">'+(state.connected?'Simulated Mac node connected. Controls below are still demo-only.':'You can test the operating model now. Real execution begins when the Mac node is paired.')+'</div></div><div class="pill">'+(state.connected?'SIMULATED LIVE':'PREVIEW')+'</div></div>'+
+ '<div class="grid"><div class="metric"><span>Revenue</span><b>$0.00</b><span>current demo view</span></div><div class="metric"><span>Products Live</span><b>3</b><span>sample portfolio count</span></div><div class="metric"><span>Content Today</span><b>0 / 3</b><span>sample publishing target</span></div><div class="metric"><span>Needs Attention</span><b>'+(q>0?1:0)+'</b><span>'+q+' queued • '+r+' running</span></div></div></section>'+
+ '<div class="section-title"><h3>Give Atlas a Mission</h3><span>CEO command</span></div>'+
+ '<div class="card" style="padding:14px"><label for="ceoCommand">Tell Atlas what outcome you want.</label><textarea id="ceoCommand" style="min-height:88px" placeholder="Example: Find out why today’s TikTok posts failed, repair the pipeline, and verify the next post is ready."></textarea><div style="height:10px"></div><button class="btn" onclick="runCEOCommand()">Send Mission to Atlas</button><div class="sub" style="margin-top:9px">Preview mode creates a simulated job and receipt. The Mac-connected version will dispatch the real bounded mission.</div></div>'+
+ '<div class="section-title"><h3>Company Right Now</h3><span>what matters first</span></div>'+
+ '<div class="card">'+
+ '<div class="row" onclick="go(\'jobs\')"><div class="ico">⚙</div><div class="rowmain"><b>Atlas is working</b><span>'+r+' running • '+q+' queued • '+cdone+' completed</span></div><div class="chev">›</div></div>'+
+ '<div class="row" onclick="showAttention()"><div class="ico">!</div><div class="rowmain"><b>Problems & blockers</b><span>'+(q>0?'1 item needs review in this demo':'No demo blockers right now')+'</span></div><span class="badge '+(q>0?'amber':'green')+'">'+(q>0?'CHECK':'CLEAR')+'</span></div>'+
+ '<div class="row" onclick="showApprovals()"><div class="ico">✓</div><div class="rowmain"><b>Approvals</b><span>No CEO approval required in the current demo</span></div><span class="badge green">0</span></div>'+
+ '<div class="row" onclick="go(\'missions\')"><div class="ico">➤</div><div class="rowmain"><b>Mission Control</b><span>Launch approved bounded jobs</span></div><div class="chev">›</div></div>'+
+ '</div>'+
+ '<div class="section-title"><h3>Quick Status</h3><span>demo company pulse</span></div>'+
+ '<div class="card">'+
+ '<div class="row"><div class="ico">▣</div><div class="rowmain"><b>Products</b><span>3 live • 1 build concept • 0 waiting for routine approval</span></div></div>'+
+ '<div class="row"><div class="ico">◫</div><div class="rowmain"><b>Marketing</b><span>Today’s 3-post target not yet satisfied in preview data</span></div><span class="badge amber">WATCH</span></div>'+
+ '<div class="row"><div class="ico">$</div><div class="rowmain"><b>Revenue</b><span>No simulated sale recorded yet</span></div><span class="badge">0</span></div>'+
+ '</div>'+
+ '<button class="btn secondary" onclick="state.connected=!state.connected;state.logs.push(now()+\'  INFO  Demo node '+(state.connected?\'connected\':\'disconnected\'));save();render();toast(state.connected?\'Demo Mac connected\':\'Demo Mac disconnected\')">'+(state.connected?'Disconnect Demo Node':'Simulate Mac Connection')+'</button>';
 }
 function jobs(){
  return '<div class="section-title" style="margin-top:4px"><h3>Job Queue</h3><span>'+state.jobs.length+' jobs</span></div>'+
@@ -114,6 +129,29 @@ const missions=[
 ['Publish Preview','Stage a preview release without public publication.','↗']
 ];
 function missionsView(){return '<div class="section-title" style="margin-top:4px"><h3>Mission Control</h3><span>bounded tasks only</span></div><div class="stack">'+missions.map((m,i)=>'<div class="card" style="margin:0"><div class="row" onclick="launch('+i+')"><div class="ico">'+m[2]+'</div><div class="rowmain"><b>'+m[0]+'</b><span>'+m[1]+'</span></div><div class="chev">›</div></div></div>').join('')+'</div><div class="install" style="margin-top:14px"><b>Safety rail</b><p>The phone preview does not have shell access or destructive system controls. The real Mac node will expose only approved Atlas actions.</p></div>'}
+function runCEOCommand(){
+ const el=document.getElementById('ceoCommand');
+ const text=(el?.value||'').trim();
+ if(!text){toast('Type a mission first');return}
+ const id=Math.max(...state.jobs.map(j=>j.id))+1;
+ state.jobs.push({id,title:'CEO Mission',state:'running',detail:text,duration:'running'});
+ state.logs.push(now()+'  INFO  CEO mission accepted: '+text);
+ save();go('jobs');toast('Mission accepted');
+ setTimeout(()=>{const x=state.jobs.find(a=>a.id===id);if(!x)return;x.state='completed';x.duration='1m '+String(20+Math.floor(Math.random()*30))+'s';state.logs.push(now()+'  INFO  CEO mission #'+id+' completed in preview');state.logs.push(now()+'  INFO  Demo execution receipt stored');save();if(state.tab==='jobs')render();toast('CEO mission completed')},2400);
+}
+function showAttention(){
+ document.getElementById('sheet').innerHTML='<div class="sheetbar"></div><h3>Problems & Blockers</h3><div class="card"><div class="row"><div class="ico">!</div><div class="rowmain"><b>Queued demo work needs sequencing</b><span>This is sample data so you can judge how Atlas should surface problems.</span></div><span class="badge amber">DEMO</span></div></div><div class="install"><b>What this becomes later</b><p>Real failed publications, broken workflows, offline workers, checkout problems, missing credentials, stalled jobs, and anything else Atlas cannot automatically repair will land here.</p></div><button class="btn secondary" onclick="closeModal()">Close</button>';
+ document.getElementById('modal').classList.add('on');
+}
+function showApprovals(){
+ document.getElementById('sheet').innerHTML='<div class="sheetbar"></div><h3>CEO Approvals</h3><div class="empty">Nothing needs your approval in this preview.</div><div class="install"><b>Approval gate</b><p>This area is reserved for spending, legal or regulatory risk, sensitive publication, reputational risk, or other material actions that should stop at your desk.</p></div><button class="btn secondary" onclick="closeModal()">Close</button>';
+ document.getElementById('modal').classList.add('on');
+}
+function showSystem(){
+ document.getElementById('sheet').innerHTML='<div class="sheetbar"></div><h3>System Health</h3><div class="card"><div class="kv"><span>Mac Node</span><b>'+(state.connected?'Simulated Online':'Not Paired')+'</b></div><div class="kv"><span>CPU</span><b>'+(state.connected?'12%':'—')+'</b></div><div class="kv"><span>Memory</span><b>'+(state.connected?'4.1 GB / 16 GB':'—')+'</b></div><div class="kv"><span>Disk</span><b>'+(state.connected?'212 GB free':'—')+'</b></div><div class="kv"><span>Uptime</span><b>'+(state.connected?'3d 4h 17m':'—')+'</b></div></div><div class="install"><b>Technical detail</b><p>This is intentionally one layer down now. The CEO Home screen should tell you what the company is doing, not make you babysit CPU gauges.</p></div><button class="btn secondary" onclick="closeModal()">Close</button>';
+ document.getElementById('modal').classList.add('on');
+}
+
 function launch(i){
  const id=Math.max(...state.jobs.map(j=>j.id))+1, m=missions[i];
  const j={id,title:m[0],state:'running',detail:m[1],duration:'running'};
@@ -122,9 +160,14 @@ function launch(i){
 }
 function logs(){return '<div class="section-title" style="margin-top:4px"><h3>Logs</h3><span>local demo history</span></div><div class="card"><div class="log">'+state.logs.slice().reverse().map(l=>l.replace('INFO','<span class="g">INFO</span>').replace('WARN','<span class="a">WARN</span>')).join('\n')+'</div></div><button class="btn secondary" onclick="state.logs=[];save();render();toast(\'Logs cleared\')">Clear Demo Logs</button>'}
 function settings(){
- return '<div class="section-title" style="margin-top:4px"><h3>Cockpit Lab</h3><span>v0.3 preview</span></div>'+
- '<div class="card"><div class="row" onclick="toggleConn()"><div class="ico">⌁</div><div class="rowmain"><b>Simulated Mac Node</b><span>Preview connected and disconnected states</span></div><div class="toggle '+(state.connected?'on':'')+'"><i></i></div></div><div class="row"><div class="ico">⌾</div><div class="rowmain"><b>Face ID</b><span>Native build feature • not available in web preview</span></div><span class="badge">NATIVE</span></div><div class="row"><div class="ico">⌘</div><div class="rowmain"><b>Real Mac Pairing</b><span>Activates when Atlas Node is running</span></div><span class="badge">LATER</span></div></div>'+
- '<div class="section-title"><h3>What should we change?</h3><span>saved on this phone</span></div><div class="card" style="padding:14px"><label for="notes">Use this while you play with the app. Add anything you want moved, renamed, removed or invented.</label><textarea id="notes" placeholder="Example: Put Mission Control on the home screen…" oninput="state.notes=this.value;save()">'+esc(state.notes)+'</textarea><div style="height:10px"></div><button class="btn" onclick="shareNotes()">Share / Copy Feedback</button></div>'+
+ return '<div class="section-title" style="margin-top:4px"><h3>More</h3><span>cockpit controls</span></div>'+
+ '<div class="card">'+
+ '<div class="row" onclick="showSystem()"><div class="ico">◉</div><div class="rowmain"><b>System Health</b><span>Mac node, CPU, memory, disk and uptime</span></div><div class="chev">›</div></div>'+
+ '<div class="row" onclick="toggleConn()"><div class="ico">⌁</div><div class="rowmain"><b>Simulated Mac Node</b><span>Preview connected and disconnected states</span></div><div class="toggle '+(state.connected?'on':'')+'"><i></i></div></div>'+
+ '<div class="row"><div class="ico">⌾</div><div class="rowmain"><b>Face ID</b><span>Native build feature • not available in web preview</span></div><span class="badge">NATIVE</span></div>'+
+ '<div class="row"><div class="ico">⌘</div><div class="rowmain"><b>Real Mac Pairing</b><span>Activates when Atlas Node is running</span></div><span class="badge">LATER</span></div>'+
+ '</div>'+
+ '<div class="section-title"><h3>What should we change?</h3><span>saved on this phone</span></div><div class="card" style="padding:14px"><label for="notes">Use this while you play with the app. Add anything you want moved, renamed, removed or invented.</label><textarea id="notes" placeholder="Example: Put approvals higher on the home screen…" oninput="state.notes=this.value;save()">'+esc(state.notes)+'</textarea><div style="height:10px"></div><button class="btn" onclick="shareNotes()">Share / Copy Feedback</button></div>'+
  '<button class="btn warn" onclick="resetDemo()">Reset Preview Data</button>';
 }
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
