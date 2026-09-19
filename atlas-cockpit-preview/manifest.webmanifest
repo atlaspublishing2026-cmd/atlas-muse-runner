@@ -1,0 +1,19 @@
+{
+  "name": "Atlas Cockpit Preview",
+  "short_name": "Atlas",
+  "description": "Project Atlas mobile cockpit preview",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#07101d",
+  "theme_color": "#07101d",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
